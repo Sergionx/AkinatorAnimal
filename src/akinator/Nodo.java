@@ -16,11 +16,11 @@ public class Nodo {
     private Nodo hijoDer;
     
     public Nodo(String data) {
-        this.data = data;
+        this.data = data.toLowerCase();
     }
 
     public Nodo(String data, Nodo hijoIzq, Nodo hijoDer) {
-        this.data = data;
+        this.data = data.toLowerCase();
         this.hijoIzq = hijoIzq;
         this.hijoDer = hijoDer;
     } 

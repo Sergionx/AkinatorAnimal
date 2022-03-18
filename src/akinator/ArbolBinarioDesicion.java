@@ -34,22 +34,34 @@ public class ArbolBinarioDesicion {
             nodoDer.setPadre(root);
             nodoIzq.setPadre(root);
         } else {
-            if (valor.equals(pRoot.getData())) {
-                Nodo nodoIzq = new Nodo(hijoIzq);
-                Nodo nodoDer = new Nodo(hijoDer);
-                Nodo padre = pRoot.getPadre();
-                Nodo aux =  new Nodo(valor, nodoIzq, nodoDer);
+            if (pRoot != null) {
+                if (valor.toLowerCase().equals(pRoot.getData())) {
+                    Nodo nodoIzq = new Nodo(hijoIzq);
+                    Nodo nodoDer = new Nodo(hijoDer);
+                    Nodo padre = pRoot.getPadre();
+                    Nodo aux =  new Nodo(valor, nodoIzq, nodoDer);
+
+                    if (padre.getHijoIzq().getData().equals(pRoot.getData())) { //Es el hijo izquierdo
+                        padre.setHijoIzq(aux);
+                    } else { //Es el hijo derecho
+                        padre.setHijoDer(aux);
+                    }
+                    aux.setPadre(padre);
+                    nodoIzq.setPadre(aux);
+                    nodoDer.setPadre(aux);
                 
-                if (padre.getHijoIzq().getData() == pRoot.getData()) { //Es el hijo izquierdo
-                    padre.setHijoIzq(aux);
-                } else { //Es el hijo derecho
-                    padre.setHijoDer(nodoDer);
+                } else{
+                    Insertar(valor, hijoIzq, hijoDer, pRoot.getHijoIzq());
+                    Insertar(valor, hijoIzq, hijoDer, pRoot.getHijoDer());
                 }
-                
-            } else{
-                Insertar(valor, hijoIzq, hijoDer, pRoot.getHijoIzq());
-                Insertar(valor, hijoIzq, hijoDer, pRoot.getHijoDer());
             }
+            
         }
     }
+
+    public Nodo getRoot() {
+        return root;
+    }
+    
+    
 }
