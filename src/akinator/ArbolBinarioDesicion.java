@@ -24,6 +24,23 @@ public class ArbolBinarioDesicion {
         }
     }
     
+    public Nodo Padre(Nodo myNode, Nodo pRoot){
+        if (pRoot == null || myNode == null) {
+            return null;
+        } else if (pRoot.getHijoDer() != null && pRoot.getHijoDer() == myNode ||
+                    pRoot.getHijoIzq()!= null && pRoot.getHijoIzq()== myNode) {
+            return pRoot;
+        } else {
+            Nodo encontrado = Padre(myNode, pRoot.getHijoIzq());
+            
+            if (encontrado == null) {
+                encontrado = Padre(myNode, pRoot.getHijoIzq());
+            }
+            
+            return encontrado;
+        }
+    }
+    
     public void Insertar(String valor, String hijoIzq, String hijoDer, Nodo pRoot){
         if (root == null) {
             Nodo nodoIzq = new Nodo(hijoIzq);
