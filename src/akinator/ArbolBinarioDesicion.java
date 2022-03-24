@@ -5,16 +5,25 @@
 package akinator;
 
 /**
- *
+ * Clase que es encargará de guardar los animales y sus respectivas preguntas
  * @author Sergionx
  */
 public class ArbolBinarioDesicion {
     private Nodo root;
-
+    
+    /**
+    * Inicializa el arbol
+    * @author Sergionx
+    */
     public ArbolBinarioDesicion() {
         this.root = null;
     }
     
+    /**
+    * @return boolean
+    * Determina si el nodo es un animal o no (equivalente si es una hoja)
+    * @author Sergionx
+    */
     public boolean isAnaimal(Nodo aux){
         if (aux.getHijoDer() == null &&
                 aux.getHijoIzq() == null) {
@@ -24,6 +33,12 @@ public class ArbolBinarioDesicion {
         }
     }
     
+    /**
+    * @return Nodo
+    * Dado un nodo cualquiera (e inicialmente la raíz del arbol) 
+    * se le devolverá su padre
+    * @author Sergionx
+    */
     public Nodo Padre(Nodo myNode, Nodo pRoot){
         if (pRoot == null || myNode == null) {
             return null;
@@ -41,6 +56,12 @@ public class ArbolBinarioDesicion {
         }
     }
     
+    /**
+    * Dado el valor del nodo (ya sea pregunta o animal) y sus 2 hijos
+    * lo insertará si alguno de los otros nodos ya tenían como hijo su valor
+    * (inicialmente recibe root)
+    * @author Sergionx
+    */
     public void Insertar(String valor, String hijoIzq, String hijoDer, Nodo pRoot){
         if (root == null) {
             Nodo nodoIzq = new Nodo(hijoIzq);
@@ -76,9 +97,22 @@ public class ArbolBinarioDesicion {
         }
     }
 
+    /**
+    * @return Nodo
+    * @author Sergionx
+    */
     public Nodo getRoot() {
         return root;
     }
     
+    /**
+    * Dado un nodo, cambia el valor de root
+    * @author Sergionx
+    */
+    public void setRoot(Nodo root) {
+        this.root = root;
+    }
+    
+   
     
 }
