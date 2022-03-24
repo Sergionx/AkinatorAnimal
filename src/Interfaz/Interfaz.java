@@ -14,7 +14,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Clase encargada de la interacción entre el usuarios y los datos
  * @author Sergionx
  */
 public class Interfaz extends javax.swing.JFrame {
@@ -27,13 +27,16 @@ public class Interfaz extends javax.swing.JFrame {
     public static Nodo nuevoAnimal = null;
     public static Nodo nuevaPregunta = null;
     
-    public static boolean jugar = false;
-    public static boolean equivocacion = false;
-    public static boolean correccion = false;
-    public static boolean respuestaCorreccion = false;
+    public static boolean jugar = false; //Determina si estoy jugando o no
+    public static boolean equivocacion = false; // Determina si no pude adivinar el animal
+    public static boolean correccion = false; // Determina si estoy esperando lque caracteriza la diferencia entre los animales
+    public static boolean respuestaCorreccion = false; // Determina si ya recibí dicha diferencia
     
     public Interfaz() {
         initComponents();
+        String file = "src\\akinator\\InputInicial.csv";
+        LeerCsvString(file);
+        
     }
 
     /**
@@ -46,7 +49,7 @@ public class Interfaz extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        LeerTxt = new javax.swing.JButton();
+        LeerCsv = new javax.swing.JButton();
         Jugar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         MensajeJugar = new javax.swing.JTextArea();
@@ -58,13 +61,13 @@ public class Interfaz extends javax.swing.JFrame {
 
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        LeerTxt.setText("Leer txt");
-        LeerTxt.addActionListener(new java.awt.event.ActionListener() {
+        LeerCsv.setText("Leer csv");
+        LeerCsv.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                LeerTxtActionPerformed(evt);
+                LeerCsvActionPerformed(evt);
             }
         });
-        jPanel1.add(LeerTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
+        jPanel1.add(LeerCsv, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
 
         Jugar.setText("Empezar a Jugar");
         Jugar.addActionListener(new java.awt.event.ActionListener() {
@@ -93,8 +96,39 @@ public class Interfaz extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void LeerTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LeerTxtActionPerformed
+    
+    /**
+    * Lee un csv dado el camino (usado solamente en la inicializacion de la interfaz)
+    * @author Sergionx
+    */
+    private  void LeerCsvString(String path){
+        BufferedReader reader = null;
+        String aux = "";
+        try {
+            reader = new BufferedReader(new FileReader(path));
+            while ((aux = reader.readLine()) != null) {
+                String[] line = aux.split(",");
+                
+                if (line.length == 0 || "Pregunta".equals(line[0]) ) {
+                           continue;
+                }
+                arbolBinarioDesicion.Insertar(line[0].trim(), line[1].trim(), line[2].trim(), arbolBinarioDesicion.getRoot());
+            }
+            reader.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Asegúrese de que los datos que esté pasando sean correctos");
+        }
+    }
+    
+    /**
+    * Lee un csv dado escogido con JFileCHooser
+    * @author Sergionx
+    */
+    private void LeerCsvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LeerCsvActionPerformed
+        if (arbolBinarioDesicion.getRoot() != null) {
+            arbolBinarioDesicion.setRoot(null);
+        }
+        
         JFileChooser file = new JFileChooser();
         file.showOpenDialog(this);
 
@@ -112,28 +146,35 @@ public class Interfaz extends javax.swing.JFrame {
                 boolean datos = false;
                 while((aux = buffer.readLine())!= null)
                 {
-                    String[] line = aux.split(",");
-                    
-                    if ("Pregunta".equals(line[0])) {
+                  String[] line = aux.split(",");
+                
+                    if (line.length == 0 || "Pregunta".equals(line[0]) ) {
                                continue;
                     }
                     arbolBinarioDesicion.Insertar(line[0].trim(), line[1].trim(), line[2].trim(), arbolBinarioDesicion.getRoot());
-                    
-                    
-                }
+                    }
                 buffer.close();
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Asegúrese de que los datos que esté pasando sean correctos");
         }
-    }//GEN-LAST:event_LeerTxtActionPerformed
-
+    }//GEN-LAST:event_LeerCsvActionPerformed
+    
+    /**
+    * Imprime el mensaje inicial y activa la varabile jugar en true
+    * @author Sergionx
+    */
     private void JugarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JugarActionPerformed
         MensajeJugar.setText("¿Estás listo para jugar una ronda? \n");
         jugar = true;
         
     }//GEN-LAST:event_JugarActionPerformed
-
+    
+    
+    /**
+    * Se encarga de simular la funcionalidad de akinator
+    * @author Sergionx
+    */
     private void EnviarRespuestaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviarRespuestaActionPerformed
        String respuesta = Respuesta.getText();
         if (respuestaCorreccion) { //Recibo la respuesta a mi pregunta de correción
@@ -154,9 +195,11 @@ public class Interfaz extends javax.swing.JFrame {
             } else {
                 padre.setHijoDer(nuevaPregunta);
             }
+           
             MensajeJugar.append("¡Muchas gracias!, ahora soy mucho más inteligente que antes. \n");
             respuestaCorreccion = false;
             Respuesta.setText("");
+            jugar = false;
             return;
         }
        
@@ -302,7 +345,7 @@ public class Interfaz extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton EnviarRespuesta;
     private javax.swing.JButton Jugar;
-    private javax.swing.JButton LeerTxt;
+    private javax.swing.JButton LeerCsv;
     private javax.swing.JTextArea MensajeJugar;
     private javax.swing.JTextField Respuesta;
     private javax.swing.JPanel jPanel1;
