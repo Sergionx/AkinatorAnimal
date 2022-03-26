@@ -10,19 +10,23 @@ package akinator;
  */
 public class Nodo {
     private String data;
-    
+    private Nodo next;
+    private Nodo node;
     private Nodo padre;
     private Nodo hijoIzq;
     private Nodo hijoDer;
     
     public Nodo(String data) {
         this.data = data.toLowerCase();
+        this.next = null;
+        this.node = null;
     }
 
     public Nodo(String data, Nodo hijoIzq, Nodo hijoDer) {
         this.data = data.toLowerCase();
         this.hijoIzq = hijoIzq;
         this.hijoDer = hijoDer;
+        
     } 
 
     public Nodo getPadre() {
@@ -57,4 +61,16 @@ public class Nodo {
         this.padre = padre;
     }
     
+    public Nodo getNext() {
+        return next;
+    }
+
+    public void setNext(Nodo next) {
+        this.next = next;
+    }
+    
+    public Nodo getNode() {
+        return node;
+    }
+         
 }
