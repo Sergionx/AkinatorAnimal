@@ -114,13 +114,12 @@ public class Interfaz extends javax.swing.JFrame {
     * @author Sergionx
     */
     private void AddHashTable(Nodo pRoot){
-        if (pRoot != null) {
-            AddHashTable(pRoot.getHijoIzq());
-            AddHashTable(pRoot.getHijoDer());
-            
+        if (pRoot != null) { 
             if (ArbolBinarioDesicion.isAnaimal(pRoot)) {
                 hashTable.insertar(pRoot.getData());
             }
+            AddHashTable(pRoot.getHijoIzq());
+            AddHashTable(pRoot.getHijoDer());     
         }
     }
     
@@ -226,6 +225,7 @@ public class Interfaz extends javax.swing.JFrame {
                 padre.setHijoDer(nuevaPregunta);
             }
            
+            hashTable.insertar(nuevoAnimal.getData());
             MensajeJugar.append("¡Muchas gracias!, ahora soy mucho más inteligente que antes. \n");
             respuestaCorreccion = false;
             Respuesta.setText("");
@@ -251,7 +251,6 @@ public class Interfaz extends javax.swing.JFrame {
             equivocacion = false;
             correccion = true;
             Respuesta.setText("");
-            hashTable.insertar(respuesta);
             return;
         }
         
@@ -345,7 +344,7 @@ public class Interfaz extends javax.swing.JFrame {
      */
     
     private void BuscarAnimalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarAnimalActionPerformed
-       String BuscarElem = JOptionPane.showInputDialog("Ingrese nombre del animal que desea buscar en nuestro arbol de animales: ");
+       String BuscarElem = JOptionPane.showInputDialog("Ingrese nombre del animal (recuerde los acentos) que desea buscar en nuestro arbol de animales: ").toLowerCase();
        
        Nodo encontrado = hashTable.buscar(BuscarElem);
         if (encontrado != null) {
