@@ -58,6 +58,7 @@ public class Interfaz extends javax.swing.JFrame {
         MensajeJugar = new javax.swing.JTextArea();
         EnviarRespuesta = new javax.swing.JButton();
         Respuesta = new javax.swing.JTextField();
+        BuscarAnimal = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -95,6 +96,14 @@ public class Interfaz extends javax.swing.JFrame {
         jPanel1.add(EnviarRespuesta, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 300, -1, -1));
         jPanel1.add(Respuesta, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 300, 140, -1));
 
+        BuscarAnimal.setText("Buscar Animal");
+        BuscarAnimal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarAnimalActionPerformed(evt);
+            }
+        });
+        jPanel1.add(BuscarAnimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 750, 370));
 
         pack();
@@ -104,7 +113,7 @@ public class Interfaz extends javax.swing.JFrame {
     * Lee un csv dado el camino (usado solamente en la inicializacion de la interfaz)
     * @author Sergionx
     */
-    private  void AddHashTable(Nodo pRoot){
+    private void AddHashTable(Nodo pRoot){
         if (pRoot != null) {
             AddHashTable(pRoot.getHijoIzq());
             AddHashTable(pRoot.getHijoDer());
@@ -242,6 +251,7 @@ public class Interfaz extends javax.swing.JFrame {
             equivocacion = false;
             correccion = true;
             Respuesta.setText("");
+            hashTable.insertar(respuesta);
             return;
         }
         
@@ -328,6 +338,23 @@ public class Interfaz extends javax.swing.JFrame {
         Respuesta.setText("");
     }//GEN-LAST:event_EnviarRespuestaActionPerformed
 
+    
+    /**
+     * Se crea el boton de buscar el animal que el usuario quiera encontrar
+     * @author Roman Chacin
+     */
+    
+    private void BuscarAnimalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarAnimalActionPerformed
+       String BuscarElem = JOptionPane.showInputDialog("Ingrese nombre del animal que desea buscar en nuestro arbol de animales: ");
+       
+       Nodo encontrado = hashTable.buscar(BuscarElem);
+        if (encontrado != null) {
+            JOptionPane.showMessageDialog(null, "Si existe el animal que ingresaste");   
+        } else {
+            JOptionPane.showMessageDialog(null, "No existe el animal que ingresaste");
+        }
+    }//GEN-LAST:event_BuscarAnimalActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -364,6 +391,7 @@ public class Interfaz extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BuscarAnimal;
     private javax.swing.JButton EnviarRespuesta;
     private javax.swing.JButton Jugar;
     private javax.swing.JButton LeerCsv;

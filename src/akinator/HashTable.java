@@ -19,8 +19,11 @@ public class HashTable {
             this.tabla[i] = null;
         }
     }   
-     
-    //para vaciar
+     /**
+     * Se crea la funcion vaciar del HashTable
+     * @author Roman Chacin
+     */
+    
     
     public void vaciado() {
         for (int i = 0; i < size; i++) {
@@ -28,7 +31,10 @@ public class HashTable {
         }
     }
     
-    //Funcion hash
+    /**
+     * Funcion que retorna el indice del cual se va a almacenar el nombre de un animal
+     * @author Roman Chacin
+     */
     
     public int hashing(String clave) {
         int valor = 0;
@@ -48,6 +54,11 @@ public class HashTable {
         return (valor % size);}
     
     
+    /**
+     * Procedimiento que inserta un animal en la HashTable
+     * @author Roman Chacin
+     */
+  
     public void insertar(String nuevo) {
         int posicion = hashing(nuevo);
         boolean existe = false;
@@ -72,7 +83,12 @@ public class HashTable {
         Nodo nuevo2 = new Nodo(nuevo);
         this.tabla[posicion] = nuevo2;
     } }
-        
+       
+    /**
+     * Funcion que busca un animal en la HashTable
+     * @author Roman Chacin
+     */
+         
     public Nodo buscar(String nombre) {
         int posicion = hashing(nombre);
         Nodo temp = this.tabla[posicion];
