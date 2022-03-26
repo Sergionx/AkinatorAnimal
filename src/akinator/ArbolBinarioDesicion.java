@@ -24,7 +24,7 @@ public class ArbolBinarioDesicion {
     * Determina si el nodo es un animal o no (equivalente si es una hoja)
     * @author Sergionx
     */
-    public boolean isAnaimal(Nodo aux){
+    public static boolean isAnaimal(Nodo aux){
         if (aux.getHijoDer() == null &&
                 aux.getHijoIzq() == null) {
             return true;

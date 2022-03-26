@@ -5,6 +5,7 @@
 package Interfaz;
 
 import akinator.ArbolBinarioDesicion;
+import akinator.HashTable;
 import akinator.Nodo;
 import akinator.StringUtils;
 import java.io.BufferedReader;
@@ -22,6 +23,8 @@ public class Interfaz extends javax.swing.JFrame {
     /**
      * Creates new form Interfaz
      */
+    public static HashTable hashTable = new HashTable(10111);
+    
     public static ArbolBinarioDesicion arbolBinarioDesicion = new ArbolBinarioDesicion();
     public static Nodo pActual = null;
     public static Nodo nuevoAnimal = null;
@@ -101,6 +104,22 @@ public class Interfaz extends javax.swing.JFrame {
     * Lee un csv dado el camino (usado solamente en la inicializacion de la interfaz)
     * @author Sergionx
     */
+    private  void AddHashTable(Nodo pRoot){
+        if (pRoot != null) {
+            AddHashTable(pRoot.getHijoIzq());
+            AddHashTable(pRoot.getHijoDer());
+            
+            if (ArbolBinarioDesicion.isAnaimal(pRoot)) {
+                hashTable.insertar(pRoot.getData());
+            }
+        }
+    }
+    
+    
+    /**
+    * Lee un csv dado el camino (usado solamente en la inicializacion de la interfaz)
+    * @author Sergionx
+    */
     private  void LeerCsvString(String path){
         BufferedReader reader = null;
         String aux = "";
@@ -115,6 +134,7 @@ public class Interfaz extends javax.swing.JFrame {
                 arbolBinarioDesicion.Insertar(line[0].trim(), line[1].trim(), line[2].trim(), arbolBinarioDesicion.getRoot());
             }
             reader.close();
+            AddHashTable(arbolBinarioDesicion.getRoot());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Asegúrese de que los datos que esté pasando sean correctos");
         }
@@ -154,6 +174,7 @@ public class Interfaz extends javax.swing.JFrame {
                     arbolBinarioDesicion.Insertar(line[0].trim(), line[1].trim(), line[2].trim(), arbolBinarioDesicion.getRoot());
                     }
                 buffer.close();
+                AddHashTable(arbolBinarioDesicion.getRoot());
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Asegúrese de que los datos que esté pasando sean correctos");
