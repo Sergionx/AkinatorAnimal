@@ -11,8 +11,10 @@ import akinator.StringUtils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.PrintWriter;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Clase encargada de la interacción entre el usuarios y los datos
@@ -59,6 +61,14 @@ public class Interfaz extends javax.swing.JFrame {
         EnviarRespuesta = new javax.swing.JButton();
         Respuesta = new javax.swing.JTextField();
         BuscarAnimal = new javax.swing.JButton();
+        Guardar = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        vizualizar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -71,7 +81,7 @@ public class Interfaz extends javax.swing.JFrame {
                 LeerCsvActionPerformed(evt);
             }
         });
-        jPanel1.add(LeerCsv, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
+        jPanel1.add(LeerCsv, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, 90, 40));
 
         Jugar.setText("Empezar a Jugar");
         Jugar.addActionListener(new java.awt.event.ActionListener() {
@@ -79,13 +89,13 @@ public class Interfaz extends javax.swing.JFrame {
                 JugarActionPerformed(evt);
             }
         });
-        jPanel1.add(Jugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
+        jPanel1.add(Jugar, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 150, 130, 40));
 
         MensajeJugar.setColumns(20);
         MensajeJugar.setRows(5);
         jScrollPane1.setViewportView(MensajeJugar);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 130, 310, 150));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 70, 310, 150));
 
         EnviarRespuesta.setText("Enviar Respuesta");
         EnviarRespuesta.addActionListener(new java.awt.event.ActionListener() {
@@ -93,8 +103,8 @@ public class Interfaz extends javax.swing.JFrame {
                 EnviarRespuestaActionPerformed(evt);
             }
         });
-        jPanel1.add(EnviarRespuesta, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 300, -1, -1));
-        jPanel1.add(Respuesta, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 300, 140, -1));
+        jPanel1.add(EnviarRespuesta, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 270, 120, 40));
+        jPanel1.add(Respuesta, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 240, 140, -1));
 
         BuscarAnimal.setText("Buscar Animal");
         BuscarAnimal.addActionListener(new java.awt.event.ActionListener() {
@@ -102,9 +112,44 @@ public class Interfaz extends javax.swing.JFrame {
                 BuscarAnimalActionPerformed(evt);
             }
         });
-        jPanel1.add(BuscarAnimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 130, -1, -1));
+        jPanel1.add(BuscarAnimal, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, 110, 40));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 750, 370));
+        Guardar.setText("Guardar");
+        Guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                GuardarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Guardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 320, 80, 40));
+
+        jLabel2.setFont(new java.awt.Font("Eras Bold ITC", 1, 36)); // NOI18N
+        jLabel2.setText("ADIVINADOR DE ANIMALES");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 20, -1, -1));
+
+        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel3.setText("Escribe aquí tu respuesta:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 240, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel4.setText("Para empezar, selecciona el archivo:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 80, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel5.setText("Si desesas, puedes buscar un animal");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 220, -1, 10));
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel6.setText("en nuestra base de datos:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, -1, -1));
+
+        vizualizar.setText("Visualizar ");
+        jPanel1.add(vizualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 310, 100, 40));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Raooult\\Desktop\\imagenes\\jungle-animals-cartoon-vector.jpg")); // NOI18N
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-90, -150, 910, 770));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 740, 370));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -354,6 +399,28 @@ public class Interfaz extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "No existe el animal que ingresaste");
         }
     }//GEN-LAST:event_BuscarAnimalActionPerformed
+    /**
+     * Se crea el boton de guardar que guardara la base de conocimientos ya 
+     * existente y tambien lo nuevo aprendido
+     * @author Karen Davila
+     */
+    private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
+        String contenido = "Pregunta,No,Si";
+                contenido += arbolBinarioDesicion.recorrerPreOrden(arbolBinarioDesicion.getRoot());
+        JFileChooser file = new JFileChooser();
+        file.setFileFilter(new FileNameExtensionFilter("csv", "csv"));
+        file.setFileSelectionMode(JFileChooser.FILES_ONLY);
+       if(file.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+            File f = file.getSelectedFile();
+            try{
+            PrintWriter printWriter = new PrintWriter(f);
+            printWriter.print(contenido);
+            printWriter.close();
+            }catch(Exception e){
+                JOptionPane.showMessageDialog(this, "Error al guardar el archivo");
+            }
+        }        // TODO add your handling code here:
+    }//GEN-LAST:event_GuardarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -393,11 +460,19 @@ public class Interfaz extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BuscarAnimal;
     private javax.swing.JButton EnviarRespuesta;
+    private javax.swing.JButton Guardar;
     private javax.swing.JButton Jugar;
     private javax.swing.JButton LeerCsv;
     private javax.swing.JTextArea MensajeJugar;
     private javax.swing.JTextField Respuesta;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton vizualizar;
     // End of variables declaration//GEN-END:variables
 }

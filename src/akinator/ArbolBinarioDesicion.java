@@ -62,7 +62,7 @@ public class ArbolBinarioDesicion {
     * (inicialmente recibe root)
     * @author Sergionx
     */
-    public void Insertar(String valor, String hijoIzq, String hijoDer, Nodo pRoot){
+    public boolean Insertar(String valor, String hijoIzq, String hijoDer, Nodo pRoot){
         if (root == null) {
             Nodo nodoIzq = new Nodo(hijoIzq);
             Nodo nodoDer = new Nodo(hijoDer);
@@ -71,11 +71,17 @@ public class ArbolBinarioDesicion {
             
             nodoDer.setPadre(root);
             nodoIzq.setPadre(root);
+            return true;
         } else {
-            if (pRoot != null) {
-                if (valor.toLowerCase().equals(pRoot.getData())) {
-                    Nodo nodoIzq = new Nodo(hijoIzq);
-                    Nodo nodoDer = new Nodo(hijoDer);
+            if (pRoot != null && valor.toLowerCase().equals(pRoot.getData())) {                
+                Nodo nodoIzq = new Nodo(hijoIzq);
+                Nodo nodoDer = new Nodo(hijoDer);
+                pRoot.setHijoIzq(nodoIzq);
+                pRoot.setHijoDer(nodoDer);
+                nodoIzq.setPadre(pRoot);
+                nodoDer.setPadre(pRoot);
+                return true;
+                /*
                     Nodo padre = pRoot.getPadre();
                     Nodo aux =  new Nodo(valor, nodoIzq, nodoDer);
 
@@ -87,14 +93,15 @@ public class ArbolBinarioDesicion {
                     aux.setPadre(padre);
                     nodoIzq.setPadre(aux);
                     nodoDer.setPadre(aux);
-                
-                } else{
-                    Insertar(valor, hijoIzq, hijoDer, pRoot.getHijoIzq());
-                    Insertar(valor, hijoIzq, hijoDer, pRoot.getHijoDer());
-                }
+                */
             }
-            
-        }
+            if (pRoot != null && !valor.toLowerCase().equals(pRoot.getData())) {                
+                    if(Insertar(valor, hijoIzq, hijoDer, pRoot.getHijoIzq()))
+                        return true;
+                return Insertar(valor, hijoIzq, hijoDer, pRoot.getHijoDer());
+            }                    
+            return false;
+        }                
     }
 
     /**
@@ -113,6 +120,23 @@ public class ArbolBinarioDesicion {
         this.root = root;
     }
     
-   
+    /**
+    * Creamos la funcion que recorrera el arbol en pre orden(padre, hijo izq,
+    * hijo der) recibe el valor del nodo y sera llamada posteriormente en el 
+    * boton GUARDAR desde la interfaz.
+    * 
+    * @author Karen Davila
+    */
+    public String recorrerPreOrden(Nodo nodo) {
+        if(nodo!= null){
+            if(nodo.getHijoIzq() != null && nodo.getHijoDer()!= null ){
+                String data = "\n"+ StringUtils.Capitalize(nodo.getData())+ ","+StringUtils.Capitalize(nodo.getHijoIzq().getData()) +"," +StringUtils.Capitalize(nodo.getHijoDer().getData());
+                data += recorrerPreOrden(nodo.getHijoIzq());
+                data += recorrerPreOrden(nodo.getHijoDer());
+                return data;    
+            }
+        }
+        return "";
+    }
     
 }
