@@ -60,7 +60,7 @@ public class ArbolBinarioDesicion {
     * Dado el valor del nodo (ya sea pregunta o animal) y sus 2 hijos
     * lo insertará si alguno de los otros nodos ya tenían como hijo su valor
     * (inicialmente recibe root)
-    * @author Sergionx
+    * @author Sergionx / Karen Davila
     */
     public boolean Insertar(String valor, String hijoIzq, String hijoDer, Nodo pRoot){
         if (root == null) {
@@ -81,19 +81,7 @@ public class ArbolBinarioDesicion {
                 nodoIzq.setPadre(pRoot);
                 nodoDer.setPadre(pRoot);
                 return true;
-                /*
-                    Nodo padre = pRoot.getPadre();
-                    Nodo aux =  new Nodo(valor, nodoIzq, nodoDer);
-
-                    if (padre.getHijoIzq().getData().equals(pRoot.getData())) { //Es el hijo izquierdo
-                        padre.setHijoIzq(aux);
-                    } else { //Es el hijo derecho
-                        padre.setHijoDer(aux);
-                    }
-                    aux.setPadre(padre);
-                    nodoIzq.setPadre(aux);
-                    nodoDer.setPadre(aux);
-                */
+                
             }
             if (pRoot != null && !valor.toLowerCase().equals(pRoot.getData())) {                
                     if(Insertar(valor, hijoIzq, hijoDer, pRoot.getHijoIzq()))

@@ -13,8 +13,15 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.graphstream.graph.Graph;
+import org.graphstream.graph.Node;
+import org.graphstream.graph.implementations.SingleGraph;
+import org.graphstream.ui.swing_viewer.SwingViewer;
+import org.graphstream.ui.swing_viewer.ViewPanel;
+import org.graphstream.ui.view.Viewer;
 
 /**
  * Clase encargada de la interacción entre el usuarios y los datos
@@ -26,7 +33,7 @@ public class Interfaz extends javax.swing.JFrame {
      * Creates new form Interfaz
      */
     public static HashTable hashTable = new HashTable(10111);
-    
+    public static Graph grafico;
     public static ArbolBinarioDesicion arbolBinarioDesicion = new ArbolBinarioDesicion();
     public static Nodo pActual = null;
     public static Nodo nuevoAnimal = null;
@@ -38,6 +45,9 @@ public class Interfaz extends javax.swing.JFrame {
     public static boolean respuestaCorreccion = false; // Determina si ya recibí dicha diferencia
     
     public Interfaz() {
+        grafico = new SingleGraph("arbol");
+        viewer = new SwingViewer(grafico, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+        viewer.enableAutoLayout();
         initComponents();
         String file = "src\\akinator\\InputInicial.csv";
         LeerCsvString(file);
@@ -144,9 +154,14 @@ public class Interfaz extends javax.swing.JFrame {
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, -1, -1));
 
         vizualizar.setText("Visualizar ");
+        vizualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vizualizarActionPerformed(evt);
+            }
+        });
         jPanel1.add(vizualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 310, 100, 40));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Raooult\\Desktop\\imagenes\\jungle-animals-cartoon-vector.jpg")); // NOI18N
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Interfaz/imagen/jungle-animals-cartoon-vector.jpg"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-90, -150, 910, 770));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(-10, 0, 740, 370));
@@ -186,6 +201,23 @@ public class Interfaz extends javax.swing.JFrame {
                            continue;
                 }
                 arbolBinarioDesicion.Insertar(line[0].trim(), line[1].trim(), line[2].trim(), arbolBinarioDesicion.getRoot());
+                Node node1 = grafico.getNode(StringUtils.Capitalize(line[0].trim()));
+                if(node1 == null){
+                    node1 = grafico.addNode(StringUtils.Capitalize(line[0].trim()));
+                    node1.setAttribute("ui.label", StringUtils.Capitalize(line[0].trim()));
+                }
+                Node node2 = grafico.getNode(StringUtils.Capitalize(line[1].trim()));
+                if(node2 == null){
+                    node2 = grafico.addNode(StringUtils.Capitalize(line[1].trim()));
+                    node2.setAttribute("ui.label", StringUtils.Capitalize(line[1].trim()));
+                }
+                Node node3 = grafico.getNode(StringUtils.Capitalize(line[2].trim()));
+                if(node3 == null){
+                    node3 = grafico.addNode(StringUtils.Capitalize(line[2].trim()));
+                    node3.setAttribute("ui.label", line[2].trim());
+                }
+                grafico.addEdge(node1.getId()+node2.getId(), node1, node2).setAttribute("ui.label","No");
+                grafico.addEdge(node1.getId()+node3.getId(), node1, node3).setAttribute("ui.label","Si");
             }
             reader.close();
             AddHashTable(arbolBinarioDesicion.getRoot());
@@ -201,6 +233,7 @@ public class Interfaz extends javax.swing.JFrame {
     private void LeerCsvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LeerCsvActionPerformed
         if (arbolBinarioDesicion.getRoot() != null) {
             arbolBinarioDesicion.setRoot(null);
+            grafico.clear();
         }
         
         JFileChooser file = new JFileChooser();
@@ -226,7 +259,24 @@ public class Interfaz extends javax.swing.JFrame {
                                continue;
                     }
                     arbolBinarioDesicion.Insertar(line[0].trim(), line[1].trim(), line[2].trim(), arbolBinarioDesicion.getRoot());
+                    Node node1 = grafico.getNode(line[0].trim());
+                    if(node1 == null){
+                        node1 = grafico.addNode(StringUtils.Capitalize(line[0].trim()));
+                        node1.setAttribute("ui.label", StringUtils.Capitalize(line[0].trim()));
                     }
+                    Node node2 = grafico.getNode(line[1].trim());
+                    if(node2 == null){
+                        node2 = grafico.addNode(StringUtils.Capitalize(line[1].trim()));
+                        node2.setAttribute("ui.label", StringUtils.Capitalize(line[1].trim()));
+                    }
+                    Node node3 = grafico.getNode(StringUtils.Capitalize(line[2].trim()));
+                    if(node3 == null){
+                        node3 = grafico.addNode(StringUtils.Capitalize(line[2].trim()));
+                        node3.setAttribute("ui.label", StringUtils.Capitalize(line[2].trim()));
+                    }
+                    grafico.addEdge(node1.getId()+node2.getId(), node1, node2).setAttribute("ui.label","No");
+                    grafico.addEdge(node1.getId()+node3.getId(), node1, node3).setAttribute("ui.label","Si");
+                }
                 buffer.close();
                 AddHashTable(arbolBinarioDesicion.getRoot());
             }
@@ -256,9 +306,13 @@ public class Interfaz extends javax.swing.JFrame {
             if ("si".equals(respuesta.trim().toLowerCase())) {
                 nuevaPregunta.setHijoIzq(pActual);
                 nuevaPregunta.setHijoDer(nuevoAnimal);
+                grafico.addEdge(nuevaPregunta.getData()+pActual.getData(),StringUtils.Capitalize(nuevaPregunta.getData()),StringUtils.Capitalize(pActual.getData())).setAttribute("ui.label","No");
+                grafico.addEdge(nuevaPregunta.getData()+nuevoAnimal.getData(),StringUtils.Capitalize(nuevaPregunta.getData()),StringUtils.Capitalize(nuevoAnimal.getData())).setAttribute("ui.label","Si");
             } else if ("no".equals(respuesta.trim().toLowerCase())) {
                 nuevaPregunta.setHijoIzq(nuevoAnimal);
-                nuevaPregunta.setHijoDer(pActual);
+                nuevaPregunta.setHijoDer(pActual);                
+                grafico.addEdge(nuevaPregunta.getData()+pActual.getData(),StringUtils.Capitalize(nuevaPregunta.getData()),StringUtils.Capitalize(nuevoAnimal.getData())).setAttribute("ui.label","No");
+                grafico.addEdge(nuevaPregunta.getData()+nuevoAnimal.getData(),StringUtils.Capitalize(nuevaPregunta.getData()),StringUtils.Capitalize(pActual.getData())).setAttribute("ui.label","Si");
             } else {
                 JOptionPane.showMessageDialog(null, "Por favor escriba una respuesta valida");
                 return;
@@ -267,8 +321,10 @@ public class Interfaz extends javax.swing.JFrame {
             Nodo padre = arbolBinarioDesicion.Padre(pActual, arbolBinarioDesicion.getRoot()); //Busco el padre del animal en el que fallé para cambiar su hijo
             if (padre.getHijoIzq().getData().equals(pActual.getData())) {
                 padre.setHijoIzq(nuevaPregunta);
+                grafico.addEdge(padre.getData()+nuevaPregunta.getData(), StringUtils.Capitalize(padre.getData()), StringUtils.Capitalize(nuevaPregunta.getData())).setAttribute("ui.label","No");
             } else {
                 padre.setHijoDer(nuevaPregunta);
+                grafico.addEdge(padre.getData()+nuevaPregunta.getData(), StringUtils.Capitalize(padre.getData()), StringUtils.Capitalize(nuevaPregunta.getData())).setAttribute("ui.label","Si");
             }
            
             MensajeJugar.append("¡Muchas gracias!, ahora soy mucho más inteligente que antes. \n");
@@ -280,16 +336,19 @@ public class Interfaz extends javax.swing.JFrame {
        
        
         if (correccion) { // Pregunto qué caracteriza el nuevo animal
-            MensajeJugar.append("Si el animal fuera un " + StringUtils.Capitalize(nuevoAnimal.getData()) + ", ¿cuál sería la respuesta a la pregunta \n");
+            MensajeJugar.append("Si el animal fuera un " + StringUtils.Capitalize(nuevoAnimal.getData()) + ", ¿cuál sería la respuesta a la pregunta? \n");
             
             correccion = false;
             respuestaCorreccion = true;
             nuevaPregunta = new Nodo(respuesta);
+            grafico.addNode(StringUtils.Capitalize(respuesta)).setAttribute("ui.label", respuesta);
+            
             return;
         }
        
        if (equivocacion) { //No adivinó el animal
             nuevoAnimal = new Nodo(respuesta);
+            grafico.addNode(StringUtils.Capitalize(respuesta)).setAttribute("ui.label", respuesta);
             MensajeJugar.append("¿Qué diferencia a un " + StringUtils.Capitalize(pActual.getData()) + 
                     " y un " + StringUtils.Capitalize(respuesta) + "? \n");
             
@@ -400,8 +459,8 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_BuscarAnimalActionPerformed
     /**
-     * Se crea el boton de guardar que guardara la base de conocimientos ya 
-     * existente y tambien lo nuevo aprendido
+     * Boton de guardar que guardara la base de conocimientos ya 
+     * existente y tambien lo nuevo aprendido en un nuevo archivo csv
      * @author Karen Davila
      */
     private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
@@ -419,8 +478,22 @@ public class Interfaz extends javax.swing.JFrame {
             }catch(Exception e){
                 JOptionPane.showMessageDialog(this, "Error al guardar el archivo");
             }
-        }        // TODO add your handling code here:
+        }   
     }//GEN-LAST:event_GuardarActionPerformed
+
+    /**
+     * Boton de visualizar que mostrara el grafico del arbol con la base de 
+     * conocimientos 
+     * @author Karen Davila
+     */
+    private void vizualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vizualizarActionPerformed
+        javax.swing.JFrame f = new JFrame();      
+        f.setSize(1000, 1000);
+        javax.swing.JPanel arbol = (ViewPanel)viewer.addDefaultView(false);
+        arbol.setSize(1000, 1000);        
+        f.add(arbol);
+        f.setVisible(true);
+    }//GEN-LAST:event_vizualizarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -475,4 +548,5 @@ public class Interfaz extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton vizualizar;
     // End of variables declaration//GEN-END:variables
+    private Viewer viewer;
 }
