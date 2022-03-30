@@ -342,12 +342,21 @@ public class Interfaz extends javax.swing.JFrame {
             respuestaCorreccion = true;
             nuevaPregunta = new Nodo(respuesta);
             grafico.addNode(StringUtils.Capitalize(respuesta)).setAttribute("ui.label", respuesta);
+            Respuesta.setText("");
             
             return;
         }
        
        if (equivocacion) { //No adivinó el animal
-            nuevoAnimal = new Nodo(respuesta);
+           if (hashTable.buscar(respuesta) != null){
+               JOptionPane.showMessageDialog(null, "El animal que ha escrito ya existe, por lo tanto no se agregará ningún animal y el juego se cancela");
+               equivocacion = false;
+               jugar = false;
+               MensajeJugar.setText("");
+               Respuesta.setText("");
+               return;
+           }
+           nuevoAnimal = new Nodo(respuesta);
             grafico.addNode(StringUtils.Capitalize(respuesta)).setAttribute("ui.label", respuesta);
             MensajeJugar.append("¿Qué diferencia a un " + StringUtils.Capitalize(pActual.getData()) + 
                     " y un " + StringUtils.Capitalize(respuesta) + "? \n");
@@ -385,6 +394,7 @@ public class Interfaz extends javax.swing.JFrame {
             } else if ("no".equals(respuesta.trim().toLowerCase())) {
                 MensajeJugar.append("Vuelve cuando estés preparado para perder.");
                 Respuesta.setText("");
+                jugar = false;
                 return;
             } else {
                 JOptionPane.showMessageDialog(null, "Por favor escriba una respuesta valida");
@@ -469,12 +479,18 @@ public class Interfaz extends javax.swing.JFrame {
         JFileChooser file = new JFileChooser();
         file.setFileFilter(new FileNameExtensionFilter("csv", "csv"));
         file.setFileSelectionMode(JFileChooser.FILES_ONLY);
-       if(file.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+        
+        if(file.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
             File f = file.getSelectedFile();
             try{
-            PrintWriter printWriter = new PrintWriter(f);
-            printWriter.print(contenido);
-            printWriter.close();
+            String filePath = f.getAbsolutePath();
+                    if(!filePath.endsWith(".csv")) {
+                        f = new File(filePath + ".csv");
+                    }
+
+                PrintWriter printWriter = new PrintWriter(f);
+                printWriter.print(contenido);
+                printWriter.close();
             }catch(Exception e){
                 JOptionPane.showMessageDialog(this, "Error al guardar el archivo");
             }
