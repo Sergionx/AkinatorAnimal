@@ -325,6 +325,7 @@ public class Interfaz extends javax.swing.JFrame {
             } else if ("no".equals(respuesta.trim().toLowerCase())) {
                 MensajeJugar.append("Vuelve cuando estés preparado para perder.");
                 Respuesta.setText("");
+                jugar = false;
                 return;
             } else {
                 JOptionPane.showMessageDialog(null, "Por favor escriba una respuesta valida");
@@ -406,19 +407,26 @@ public class Interfaz extends javax.swing.JFrame {
     private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
         String contenido = "Pregunta,No,Si";
                 contenido += arbolBinarioDesicion.recorrerPreOrden(arbolBinarioDesicion.getRoot());
+        
         JFileChooser file = new JFileChooser();
         file.setFileFilter(new FileNameExtensionFilter("csv", "csv"));
         file.setFileSelectionMode(JFileChooser.FILES_ONLY);
-       if(file.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
+        
+        if(file.showSaveDialog(this) == JFileChooser.APPROVE_OPTION){
             File f = file.getSelectedFile();
             try{
-            PrintWriter printWriter = new PrintWriter(f);
-            printWriter.print(contenido);
-            printWriter.close();
+                String filePath = f.getAbsolutePath();
+                if(!filePath.endsWith(".csv")) {
+                    f = new File(filePath + ".csv");
+}
+                
+                PrintWriter printWriter = new PrintWriter(f);
+                printWriter.print(contenido);
+                printWriter.close();
             }catch(Exception e){
                 JOptionPane.showMessageDialog(this, "Error al guardar el archivo");
             }
-        }        // TODO add your handling code here:
+        }
     }//GEN-LAST:event_GuardarActionPerformed
 
     /**
