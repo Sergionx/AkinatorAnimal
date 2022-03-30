@@ -42,14 +42,14 @@ public class ArbolBinarioDesicion {
     public Nodo Padre(Nodo myNode, Nodo pRoot){
         if (pRoot == null || myNode == null) {
             return null;
-        } else if (pRoot.getHijoDer() != null && pRoot.getHijoDer() == myNode ||
-                    pRoot.getHijoIzq()!= null && pRoot.getHijoIzq()== myNode) {
+        } else if (pRoot.getHijoDer() == myNode ||
+                   pRoot.getHijoIzq()== myNode) {
             return pRoot;
         } else {
             Nodo encontrado = Padre(myNode, pRoot.getHijoIzq());
             
             if (encontrado == null) {
-                encontrado = Padre(myNode, pRoot.getHijoIzq());
+                encontrado = Padre(myNode, pRoot.getHijoDer());
             }
             
             return encontrado;
